@@ -13,21 +13,17 @@ export async function POST(req: NextRequest) {
   try {
     const data = await req.formData()
 
-    const nombre = data.get('nombre') as string
-    const email = data.get('email') as string
-    const tipo = data.get('tipo') as string
-    const mensaje = data.get('mensaje') as string
-    const referencias = data.getAll('referencias') as File[]
-
-    const tipoLabels: Record<string, string> = {
-      tatuaje: 'Consulta de tatuaje',
-      'cover-up': 'Cover-up',
-      escritura: 'Sobre escritura',
-      otro: 'Otro',
-    }
+    const nombre     = data.get('nombre') as string
+    const whatsapp   = data.get('whatsapp') as string
+    const correo     = data.get('correo') as string
+    const descripcion = data.get('descripcion') as string
+    const estilo     = data.get('estilo') as string
+    const area       = data.get('area') as string
+    const tamano     = data.get('tamano') as string
+    const files      = data.getAll('referencias') as File[]
 
     const attachments = await Promise.all(
-      referencias
+      files
         .filter((f) => f && f.size > 0)
         .map(async (file) => ({
           filename: file.name,
@@ -36,38 +32,36 @@ export async function POST(req: NextRequest) {
         }))
     )
 
+    const row = (label: string, value: string) =>
+      `<tr>
+        <td style="padding:8px 0;color:#999;font-size:12px;white-space:nowrap;vertical-align:top;width:130px;">${label}</td>
+        <td style="padding:8px 0 8px 16px;font-size:13px;color:#222;line-height:1.5;">${value || '—'}</td>
+      </tr>`
+
     const html = `
-      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 520px; color: #222;">
-        <h2 style="margin: 0 0 24px; font-size: 18px; font-weight: 600; color: #111;">
-          Nuevo mensaje — stevanmarroquin.com
-        </h2>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #888; width: 110px;">Nombre</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; color: #222;">${nombre}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #888;">Email</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; color: #222;"><a href="mailto:${email}" style="color: #333;">${email}</a></td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #888;">Tipo</td>
-            <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-size: 14px; color: #222;">${tipoLabels[tipo] ?? tipo}</td>
-          </tr>
-          <tr>
-            <td style="padding: 10px 0; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #888; vertical-align: top;">Mensaje</td>
-            <td style="padding: 10px 0; font-size: 14px; color: #222; line-height: 1.6;">${mensaje.replace(/\n/g, '<br>')}</td>
-          </tr>
+      <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#fff;padding:32px;border-radius:4px;">
+        <p style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#bbb;margin:0 0 6px;">stevanmarroquin.com</p>
+        <h2 style="font-size:20px;margin:0 0 24px;color:#111;font-weight:600;">Solicitud de cita · Tatuaje</h2>
+        <table style="width:100%;border-collapse:collapse;border-top:1px solid #eee;">
+          ${row('Nombre', nombre)}
+          ${row('WhatsApp', whatsapp)}
+          ${row('Correo', `<a href="mailto:${correo}" style="color:#333;">${correo}</a>`)}
+          ${row('Tatuaje', descripcion)}
+          ${row('Estilo', estilo)}
+          ${row('Área', area)}
+          ${row('Tamaño', tamano)}
         </table>
-        ${attachments.length > 0 ? `<p style="margin-top: 16px; font-size: 12px; color: #888;">${attachments.length} imagen(es) adjunta(s).</p>` : ''}
+        ${attachments.length > 0
+          ? `<p style="margin-top:20px;font-size:12px;color:#999;">${attachments.length} imagen(es) adjunta(s).</p>`
+          : ''}
       </div>
     `
 
     await transporter.sendMail({
       from: `"stevanmarroquin.com" <${process.env.GMAIL_USER}>`,
       to: process.env.GMAIL_USER,
-      replyTo: email,
-      subject: `[stevanmarroquin.com] ${tipoLabels[tipo] ?? tipo} — ${nombre}`,
+      replyTo: correo,
+      subject: `Solicitud de cita · ${nombre}`,
       html,
       attachments,
     })

@@ -8,7 +8,7 @@ const inputStyle: React.CSSProperties = {
   border: '0.5px solid rgba(240,237,232,0.12)',
   color: '#f0ede8',
   fontSize: '13px',
-  padding: '0.85rem 1rem',
+  padding: '0.75rem 0.9rem',
   outline: 'none',
   fontFamily: 'inherit',
   transition: 'border-color 0.2s',
@@ -19,9 +19,9 @@ const labelStyle: React.CSSProperties = {
   fontSize: '10px',
   letterSpacing: '0.18em',
   textTransform: 'uppercase',
-  color: 'rgba(240,237,232,0.45)',
+  color: 'rgba(240,237,232,0.4)',
   display: 'block',
-  marginBottom: '0.45rem',
+  marginBottom: '0.4rem',
 }
 
 function useScrollReveal() {
@@ -29,7 +29,10 @@ function useScrollReveal() {
   useEffect(() => {
     const el = ref.current
     if (!el) return
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { el.classList.add('visible'); obs.disconnect() } }, { threshold: 0.08 })
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) { el.classList.add('visible'); obs.disconnect() } },
+      { threshold: 0.08 }
+    )
     obs.observe(el)
     return () => obs.disconnect()
   }, [])
@@ -40,30 +43,23 @@ export default function Contacto() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle')
   const headingRef = useScrollReveal()
 
+  const onFocus = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = 'rgba(240,237,232,0.4)'
+  }
+  const onBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    e.currentTarget.style.borderColor = 'rgba(240,237,232,0.12)'
+  }
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setStatus('sending')
-    const form = e.currentTarget
-    const data = new FormData(form)
-
+    const data = new FormData(e.currentTarget)
     try {
       const res = await fetch('/api/contact', { method: 'POST', body: data })
-      if (res.ok) {
-        setStatus('sent')
-        form.reset()
-      } else {
-        setStatus('error')
-      }
+      setStatus(res.ok ? 'sent' : 'error')
     } catch {
       setStatus('error')
     }
-  }
-
-  const focusStyle = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.currentTarget.style.borderColor = 'rgba(240,237,232,0.4)'
-  }
-  const blurStyle = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    e.currentTarget.style.borderColor = 'rgba(240,237,232,0.12)'
   }
 
   return (
@@ -80,102 +76,119 @@ export default function Contacto() {
             Agenda tu cita
           </h2>
           <p style={{ fontSize: '14px', color: 'rgba(240,237,232,0.5)', lineHeight: 1.7, marginBottom: '2rem', maxWidth: '360px' }}>
-            ¿Tienes un proyecto de tatuaje en mente? Cuéntame la idea, el estilo que te interesa y el área del cuerpo. Respondo lo antes posible.
+            ¿Tienes un proyecto de tatuaje en mente? Cuéntame la idea, el estilo y el área. Te respondo lo antes posible.
           </p>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
             <a href="https://www.instagram.com/stevanmarroquintattoo" target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.45)', textDecoration: 'none', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.6rem' }}
+              style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.4)', textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = '#f0ede8')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(240,237,232,0.45)')}>
-              <span style={{ fontSize: '14px' }}>📷</span> @stevanmarroquintattoo
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(240,237,232,0.4)')}>
+              @stevanmarroquintattoo
             </a>
             <a href="https://soulsanchor.com" target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.45)', textDecoration: 'none', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.6rem' }}
+              style={{ fontSize: '11px', letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.4)', textDecoration: 'none', transition: 'color 0.2s' }}
               onMouseEnter={(e) => (e.currentTarget.style.color = '#f0ede8')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(240,237,232,0.45)')}>
-              <span style={{ fontSize: '14px' }}>🏠</span> Soul&apos;s Anchor Studio
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(240,237,232,0.4)')}>
+              Soul&apos;s Anchor Tattoo Studio
             </a>
           </div>
         </div>
 
         {/* Right: Form */}
-        <div>
+        <div style={{ background: 'rgba(240,237,232,0.02)', border: '0.5px solid rgba(240,237,232,0.08)', padding: 'clamp(1.5rem, 4vw, 2.5rem)', borderRadius: '3px' }}>
+
+          <p style={{ fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.35)', marginBottom: '1.5rem' }}>
+            Solicitud de cita · Tatuaje
+          </p>
+
           {status === 'sent' ? (
-            <div style={{ padding: '2.5rem', background: 'rgba(240,237,232,0.03)', border: '0.5px solid rgba(240,237,232,0.08)', borderRadius: '4px', textAlign: 'center' }}>
+            <div style={{ textAlign: 'center', padding: '2.5rem 0' }}>
               <div style={{ width: '32px', height: '32px', borderRadius: '50%', border: '0.5px solid rgba(240,237,232,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', fontSize: '16px' }}>✓</div>
-              <p style={{ fontSize: '14px', color: '#f0ede8', marginBottom: '0.5rem', fontWeight: 500 }}>¡Mensaje enviado!</p>
-              <p style={{ fontSize: '13px', color: 'rgba(240,237,232,0.5)', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '14px', color: '#f0ede8', marginBottom: '0.5rem', fontWeight: 500 }}>¡Solicitud enviada!</p>
+              <p style={{ fontSize: '13px', color: 'rgba(240,237,232,0.45)', lineHeight: 1.6 }}>
                 Te estaré contactando lo antes posible.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-              {/* Row: Nombre + Email */}
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
+              {/* Nombre + WhatsApp */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <div>
-                  <label style={labelStyle}>Nombre</label>
-                  <input type="text" name="nombre" required style={inputStyle} onFocus={focusStyle} onBlur={blurStyle} />
+                  <label style={labelStyle}>Nombre completo</label>
+                  <input type="text" name="nombre" placeholder="Tu nombre" required style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
                 <div>
-                  <label style={labelStyle}>Email</label>
-                  <input type="email" name="email" required style={inputStyle} onFocus={focusStyle} onBlur={blurStyle} />
+                  <label style={labelStyle}>WhatsApp</label>
+                  <input type="text" name="whatsapp" placeholder="+502 ..." required style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
                 </div>
               </div>
 
-              {/* Tipo */}
+              {/* Correo */}
               <div>
-                <label style={labelStyle}>Tipo de consulta</label>
-                <select name="tipo" required style={{ ...inputStyle, cursor: 'pointer' }} onFocus={focusStyle} onBlur={blurStyle}>
-                  <option value="" disabled selected>Selecciona...</option>
-                  <option value="tatuaje">Consulta de tatuaje</option>
-                  <option value="cover-up">Cover-up</option>
-                  <option value="escritura">Sobre escritura</option>
-                  <option value="otro">Otro</option>
-                </select>
+                <label style={labelStyle}>Correo electrónico</label>
+                <input type="email" name="correo" placeholder="tu@email.com" required style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
               </div>
 
-              {/* Mensaje */}
+              {/* Descripción */}
               <div>
-                <label style={labelStyle}>Mensaje</label>
-                <textarea
-                  name="mensaje"
-                  required
-                  rows={5}
-                  placeholder="Cuéntame tu idea..."
-                  style={{ ...inputStyle, resize: 'vertical', minHeight: '120px' }}
-                  onFocus={focusStyle}
-                  onBlur={blurStyle}
-                />
+                <label style={labelStyle}>Describe tu tatuaje</label>
+                <textarea name="descripcion" placeholder="Tu idea, referencias, etc." rows={3} style={{ ...inputStyle, resize: 'none' }} onFocus={onFocus} onBlur={onBlur} />
+              </div>
+
+              {/* Estilo + Área */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div>
+                  <label style={labelStyle}>Estilo que buscas</label>
+                  <input type="text" name="estilo" placeholder="Neo Japonés, Blackwork..." style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                </div>
+                <div>
+                  <label style={labelStyle}>Área del tatuaje</label>
+                  <input type="text" name="area" placeholder="Brazo, espalda, pierna..." style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
+                </div>
+              </div>
+
+              {/* Tamaño */}
+              <div>
+                <label style={labelStyle}>Tamaño aproximado</label>
+                <input type="text" name="tamano" placeholder="Sé lo más específico posible." required style={inputStyle} onFocus={onFocus} onBlur={onBlur} />
               </div>
 
               {/* Referencias */}
               <div>
-                <label style={labelStyle}>Imágenes de referencia (opcional)</label>
+                <label style={labelStyle}>Imágenes de referencia</label>
+                <p style={{ fontSize: '11px', color: 'rgba(240,237,232,0.32)', lineHeight: 1.7, marginBottom: '0.5rem' }}>
+                  Adjunta referencias, fotos del área, o fotos del tatuaje que deseas cubrir. Si vas a enviar una foto del área, asegúrate que salga en una posición natural, párate recto y pídele favor a alguien que te tome la foto.
+                </p>
                 <input
                   type="file"
                   name="referencias"
                   accept="image/*"
                   multiple
-                  style={{ ...inputStyle, padding: '0.65rem 1rem', cursor: 'pointer', fontSize: '12px', color: 'rgba(240,237,232,0.55)' }}
+                  style={{ ...inputStyle, padding: '0.6rem 0.9rem', cursor: 'pointer', fontSize: '12px', color: 'rgba(240,237,232,0.45)' }}
                 />
               </div>
 
               {status === 'error' && (
                 <p style={{ fontSize: '12px', color: '#e88', letterSpacing: '0.03em' }}>
-                  Hubo un error al enviar. Intenta nuevamente o escríbeme directamente por Instagram.
+                  Hubo un error al enviar. Intenta de nuevo o escríbeme por Instagram.
                 </p>
               )}
 
               <button
                 type="submit"
                 disabled={status === 'sending'}
-                style={{ fontSize: '11px', letterSpacing: '0.16em', textTransform: 'uppercase', color: '#0e0e0c', background: status === 'sending' ? 'rgba(240,237,232,0.6)' : '#f0ede8', padding: '0.85rem', border: 'none', cursor: status === 'sending' ? 'wait' : 'pointer', fontFamily: 'inherit', fontWeight: 600, transition: 'opacity 0.2s', marginTop: '0.25rem' }}
+                style={{ fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#0e0e0c', background: status === 'sending' ? 'rgba(240,237,232,0.6)' : '#f0ede8', padding: '0.85rem', border: 'none', cursor: status === 'sending' ? 'wait' : 'pointer', fontFamily: 'inherit', fontWeight: 600, transition: 'opacity 0.2s', marginTop: '0.25rem', borderRadius: '2px' }}
                 onMouseEnter={(e) => { if (status !== 'sending') e.currentTarget.style.opacity = '0.82' }}
                 onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
               >
-                {status === 'sending' ? 'Enviando...' : 'Enviar mensaje'}
+                {status === 'sending' ? 'Enviando...' : 'Enviar solicitud'}
               </button>
+
+              <p style={{ fontSize: '11px', color: 'rgba(240,237,232,0.2)', textAlign: 'center', marginTop: '0.25rem', letterSpacing: '0.03em' }}>
+                También puedes visitarme en Soul&apos;s Anchor · Lun–Sáb · 10am a 7pm · Zona 10
+              </p>
             </form>
           )}
         </div>
