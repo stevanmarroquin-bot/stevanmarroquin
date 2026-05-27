@@ -48,8 +48,8 @@ export default function Hero() {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              objectPosition: 'center top',
-              opacity: 0.55,
+              objectPosition: 'center 20%',
+              opacity: 0.6,
             }}
             loading={i === 0 ? 'eager' : 'lazy'}
           />
@@ -85,15 +85,15 @@ export default function Hero() {
         {/* Name */}
         <h1
           style={{
-            fontSize: 'clamp(2.6rem, 8vw, 6.5rem)',
-            fontWeight: 600,
-            letterSpacing: '-0.02em',
-            lineHeight: 1,
+            fontSize: 'clamp(3.8rem, 12vw, 10rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.04em',
+            lineHeight: 0.88,
             color: '#f0ede8',
-            marginBottom: '0.6rem',
+            marginBottom: '0.75rem',
           }}
         >
-          Hola, soy Stevan
+          Hola,<br />soy Stevan
         </h1>
 
         {/* Divider */}
@@ -125,7 +125,7 @@ export default function Hero() {
             style={{ fontSize: '11px', letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.7)', background: 'transparent', padding: '0.75rem 1.8rem', textDecoration: 'none', border: '0.5px solid rgba(240,237,232,0.25)', transition: 'color 0.2s, border-color 0.2s' }}
             onMouseEnter={(e) => { e.currentTarget.style.color = '#f0ede8'; e.currentTarget.style.borderColor = 'rgba(240,237,232,0.55)' }}
             onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(240,237,232,0.7)'; e.currentTarget.style.borderColor = 'rgba(240,237,232,0.25)' }}>
-            Escritura
+            Teología
           </a>
         </div>
 
