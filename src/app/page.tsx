@@ -15,8 +15,8 @@ export default function Home() {
       <main>
         <Hero />
         <Portfolio />
-        <Escritura posts={posts} />
         <Contacto />
+        <Escritura posts={posts} />
       </main>
       <Footer />
     </>

@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 
 const links = [
   { label: 'Portfolio', anchor: '#portfolio' },
-  { label: 'Teología', anchor: '#escritura' },
   { label: 'Contacto', anchor: '#contacto' },
+  { label: 'Teología', anchor: '#escritura' },
 ]
 
 export default function Nav() {

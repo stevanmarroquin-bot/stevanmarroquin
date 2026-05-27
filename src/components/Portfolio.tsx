@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { portfolioItems, type PortfolioCategory } from '@/lib/portfolio'
 
+const PAGE_SIZE = 10
+
 const ALL = 'todos'
 type Filter = PortfolioCategory | typeof ALL
 
@@ -59,10 +61,18 @@ function Lightbox({ src, alt, onClose }: { src: string; alt: string; onClose: ()
 
 export default function Portfolio() {
   const [filter, setFilter] = useState<Filter>(ALL)
+  const [visible, setVisible] = useState(PAGE_SIZE)
   const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null)
   const headingRef = useScrollReveal()
 
-  const visible = filter === ALL ? portfolioItems : portfolioItems.filter((item) => item.category === filter)
+  const filtered = filter === ALL ? portfolioItems : portfolioItems.filter((item) => item.category === filter)
+  const shown = filtered.slice(0, visible)
+  const hasMore = visible < filtered.length
+
+  function handleFilter(f: Filter) {
+    setFilter(f)
+    setVisible(PAGE_SIZE)
+  }
 
   return (
     <section id="portfolio" className="section-line" style={{ padding: 'clamp(3.5rem, 8vw, 6rem) clamp(1.5rem, 5vw, 5rem)' }}>
@@ -84,7 +94,7 @@ export default function Portfolio() {
           {filterOptions.map(({ key, label }) => (
             <button
               key={key}
-              onClick={() => setFilter(key)}
+              onClick={() => handleFilter(key)}
               style={{
                 fontSize: '10px',
                 letterSpacing: '0.14em',
@@ -112,7 +122,7 @@ export default function Portfolio() {
             gap: '6px',
           }}
         >
-          {visible.map((item, i) => (
+          {shown.map((item, i) => (
             <div
               key={item.src}
               onClick={() => setLightbox({ src: item.src, alt: item.alt })}
@@ -134,7 +144,7 @@ export default function Portfolio() {
                   height: '100%',
                   objectFit: 'cover',
                   objectPosition: 'center',
-                  transition: 'transform 0.45s ease, opacity 0.3s',
+                  transition: 'transform 0.45s ease',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.06)')}
                 onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
@@ -143,18 +153,44 @@ export default function Portfolio() {
           ))}
         </div>
 
-        {/* Instagram CTA */}
-        <div style={{ marginTop: '2.5rem', display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <span style={{ height: '0.5px', flex: 1, maxWidth: '40px', background: 'rgba(240,237,232,0.12)' }} />
+        {/* Load more / Instagram CTA */}
+        <div style={{ marginTop: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+          {hasMore ? (
+            <button
+              onClick={() => setVisible((v) => v + PAGE_SIZE)}
+              style={{
+                fontSize: '10px',
+                letterSpacing: '0.16em',
+                textTransform: 'uppercase',
+                padding: '0.65rem 1.8rem',
+                border: '0.5px solid rgba(240,237,232,0.2)',
+                background: 'transparent',
+                color: 'rgba(240,237,232,0.6)',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                fontFamily: 'inherit',
+                borderRadius: '2px',
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'rgba(240,237,232,0.5)'; e.currentTarget.style.color = '#f0ede8' }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'rgba(240,237,232,0.2)'; e.currentTarget.style.color = 'rgba(240,237,232,0.6)' }}
+            >
+              Ver más · {filtered.length - visible} restantes
+            </button>
+          ) : (
+            <span style={{ fontSize: '10px', color: 'rgba(240,237,232,0.25)', letterSpacing: '0.1em' }}>
+              {filtered.length} imágenes
+            </span>
+          )}
+
           <a
             href="https://www.instagram.com/stevanmarroquintattoo"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.45)', textDecoration: 'none', transition: 'color 0.2s' }}
+            style={{ fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.4)', textDecoration: 'none', transition: 'color 0.2s' }}
             onMouseEnter={(e) => (e.currentTarget.style.color = '#f0ede8')}
-            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(240,237,232,0.45)')}
+            onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(240,237,232,0.4)')}
           >
-            Ver más en @stevanmarroquintattoo
+            @stevanmarroquintattoo →
           </a>
         </div>
       </div>
