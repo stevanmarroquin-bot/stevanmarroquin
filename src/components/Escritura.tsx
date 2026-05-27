@@ -71,7 +71,7 @@ export default function Escritura({ posts }: { posts: Post[] }) {
         {/* Header */}
         <div ref={headingRef} className="fade-up" style={{ marginBottom: '3rem' }}>
           <div style={{ fontSize: '10px', letterSpacing: '0.35em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.4)', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            Escritura
+            Teología
             <span style={{ flex: 1, maxWidth: '48px', height: '0.5px', background: 'rgba(240,237,232,0.12)' }} />
           </div>
           <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.75rem)', fontWeight: 600, letterSpacing: '-0.02em', color: '#f0ede8', lineHeight: 1.1, marginBottom: '0.75rem' }}>

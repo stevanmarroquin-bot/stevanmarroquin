@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 const links = [
   { label: 'Portfolio', anchor: '#portfolio' },
-  { label: 'Escritura', anchor: '#escritura' },
+  { label: 'Teología', anchor: '#escritura' },
   { label: 'Contacto', anchor: '#contacto' },
 ]
 
@@ -40,7 +40,7 @@ export default function Nav() {
             Stevan Marroquín
           </span>
           <span style={{ fontSize: '9px', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(240,237,232,0.4)' }}>
-            Tatuador · Teología
+            Artista · Comunicador
           </span>
         </a>
 

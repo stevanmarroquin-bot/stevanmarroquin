@@ -85,32 +85,32 @@ export default function Hero() {
         {/* Name */}
         <h1
           style={{
-            fontSize: 'clamp(3rem, 9vw, 7.5rem)',
+            fontSize: 'clamp(2.6rem, 8vw, 6.5rem)',
             fontWeight: 600,
             letterSpacing: '-0.02em',
             lineHeight: 1,
             color: '#f0ede8',
-            marginBottom: '1rem',
+            marginBottom: '0.6rem',
           }}
         >
-          Stevan<br />Marroquín
+          Hola, soy Stevan
         </h1>
 
         {/* Divider */}
-        <div style={{ width: '48px', height: '0.5px', background: 'rgba(240,237,232,0.3)', marginBottom: '1.25rem' }} />
+        <div style={{ width: '48px', height: '0.5px', background: 'rgba(240,237,232,0.3)', marginBottom: '0.8rem' }} />
 
         {/* Subtitle */}
         <p
           style={{
-            fontSize: 'clamp(13px, 1.8vw, 16px)',
+            fontSize: 'clamp(13px, 1.8vw, 15px)',
             color: 'rgba(240,237,232,0.6)',
-            letterSpacing: '0.04em',
-            marginBottom: '2.5rem',
-            maxWidth: '420px',
-            lineHeight: 1.6,
+            letterSpacing: '0.02em',
+            marginBottom: '2rem',
+            maxWidth: '460px',
+            lineHeight: 1.55,
           }}
         >
-          Tatuador especializado en Neo Japonés, Neo Tradicional y Cover-ups. Escritor de teología.
+          Artista tatuador especializado en Neo Japonés, Neo Tradicional y Cover-ups — Escritor de teología.
         </p>
 
         {/* CTAs */}
