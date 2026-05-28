@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
     const html = `
       <div style="font-family:'Helvetica Neue',Arial,sans-serif;max-width:560px;margin:0 auto;background:#fff;padding:32px;border-radius:4px;">
         <p style="font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:#bbb;margin:0 0 6px;">stevanmarroquin.com</p>
-        <h2 style="font-size:20px;margin:0 0 24px;color:#111;font-weight:600;">Solicitud de cita · Tatuaje</h2>
+        <h2 style="font-size:20px;margin:0 0 24px;color:#111;font-weight:600;">Cita para Stevan · Tatuaje</h2>
         <table style="width:100%;border-collapse:collapse;border-top:1px solid #eee;">
           ${row('Nombre', nombre)}
           ${row('WhatsApp', whatsapp)}
@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       from: `"stevanmarroquin.com" <${process.env.GMAIL_USER}>`,
       to: process.env.GMAIL_USER,
       replyTo: correo,
-      subject: `Solicitud de cita · ${nombre}`,
+      subject: `[Stevan] Solicitud de cita · ${nombre}`,
       html,
       attachments,
     })
